@@ -1,8 +1,5 @@
-public class EvenDigits {
-
-    public static void main(String[] args) {}
-
-    static int numbers(int[] nums){
+class Solution {
+    public int findNumbers(int[] nums) {
         int count = 0;
         for( int number : nums){
             if (IsEven(number)) {
@@ -12,19 +9,22 @@ public class EvenDigits {
         return count;
     }
 
-    static boolean IsEven(int number){
+    boolean IsEven(int number){
         int even = Digits(number);
         if (even %2 == 0) {
             return true;   
-        }return false;
+        }
+        return false;
     }
 
-    static int Digits(int num){
+    int Digits(int num){
         int count = 0;
+       
         while ( num > 0) {
             count++;
             num /= 10;
         }
         return count;
     }
+    
 }
