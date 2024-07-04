@@ -1,5 +1,3 @@
-import java.util.*;
-
 class Solution {
     public int lengthOfLastWord(String s) {
         s = new StringBuilder(s).reverse().toString().trim();
