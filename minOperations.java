@@ -1,7 +1,9 @@
 import java.util.Stack;
 
 class Solution {
+    @SuppressWarnings("unchecked")
     public int minOperations(String[] logs) {
+        @SuppressWarnings("rawtypes")
         Stack element = new Stack<>();
         for (int i = 0; i < logs.length; i++) {
             if (logs[i].equals("../")) {
