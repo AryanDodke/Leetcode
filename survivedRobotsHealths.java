@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class survivedRobotsHealths {
+class Solution {
     // Custom comparator to sort robots by position
     private static class RobotComparator implements Comparator<int[]> {
         @Override
