@@ -1,77 +1,52 @@
+
 import java.util.*;
 
 class Solution {
-    public int minimumCost(String source, String target, char[] original, char[] changed, int[] cost) {
-        int n = 26; // Number of lowercase English letters
-        int INF = Integer.MAX_VALUE / 2;
+    public long[] solve(int a, List<int[]>[] adj) {
+        PriorityQueue<Pair<Long, Integer>> q = new PriorityQueue<>(Comparator.comparingLong(Pair::getKey));
+        q.add(new Pair<>(0L, a));
+        long[] dist = new long[26];
+        Arrays.fill(dist, -1L);
         
-        // Initialize distance array with high values
-        int[][] dist = new int[n][n];
-        for (int i = 0; i < n; i++) {
-            Arrays.fill(dist[i], INF);
-            dist[i][i] = 0;
-        }
-        
-        // Set up direct transformations
-        for (int i = 0; i < original.length; i++) {
-            int from = original[i] - 'a';
-            int to = changed[i] - 'a';
-            dist[from][to] = Math.min(dist[from][to], cost[i]);
-        }
-        
-        // Floyd-Warshall algorithm to find shortest paths
-        for (int k = 0; k < n; k++) {
-            for (int i = 0; i < n; i++) {
-                for (int j = 0; j < n; j++) {
-                    if (dist[i][k] < INF && dist[k][j] < INF) {
-                        dist[i][j] = Math.min(dist[i][j], dist[i][k] + dist[k][j]);
-                    }
+        while (!q.isEmpty()) {
+            Pair<Long, Integer> p = q.poll();
+            for (int[] i : adj[p.getValue()]) {
+                if (dist[i[0]] == -1 || p.getKey() + i[1] < dist[i[0]]) {
+                    dist[i[0]] = p.getKey() + i[1];
+                    q.add(new Pair<>(dist[i[0]], i[0]));
                 }
             }
         }
-        
-        // Calculate the total minimum cost
-        int totalCost = 0;
-        for (int i = 0; i < source.length(); i++) {
-            char srcChar = source.charAt(i);
-            char tgtChar = target.charAt(i);
-            if (srcChar == tgtChar) continue;
-            
-            int from = srcChar - 'a';
-            int to = tgtChar - 'a';
-            
-            if (dist[from][to] == INF) {
-                return -1; // Impossible to convert
-            }
-            
-            totalCost += dist[from][to];
-        }
-        
-        return totalCost;
+        return dist;
     }
 
-    public static void main(String[] args) {
-        Solution solution = new Solution();
+    public long minimumCost(String s, String t, char[] o, char[] c, int[] cost) {
+        List<int[]>[] adj = new List[30];
+        for (int i = 0; i < 30; i++) {
+            adj[i] = new ArrayList<>();
+        }
+        int n = o.length;
+        for (int i = 0; i < n; i++) {
+            adj[o[i] - 'a'].add(new int[]{c[i] - 'a', cost[i]});
+        }
 
-        String source1 = "abcd";
-        String target1 = "acbe";
-        char[] original1 = {'a','b','c','c','e','d'};
-        char[] changed1 = {'b','c','b','e','b','e'};
-        int[] cost1 = {2,5,5,1,2,20};
-        System.out.println(solution.minimumCost(source1, target1, original1, changed1, cost1)); // Output: 28
+        Map<Integer, long[]> m = new HashMap<>();
+        for (int i = 0; i < 26; i++) {
+            long[] k = solve(i, adj);
+            m.put(i, k);
+        }
 
-        String source2 = "aaaa";
-        String target2 = "bbbb";
-        char[] original2 = {'a','c'};
-        char[] changed2 = {'c','b'};
-        int[] cost2 = {1,2};
-        System.out.println(solution.minimumCost(source2, target2, original2, changed2, cost2)); // Output: 12
-
-        String source3 = "abcd";
-        String target3 = "abce";
-        char[] original3 = {'a'};
-        char[] changed3 = {'e'};
-        int[] cost3 = {10000};
-        System.out.println(solution.minimumCost(source3, target3, original3, changed3, cost3)); // Output: -1
+        n = s.length();
+        long ans = 0;
+        for (int i = 0; i < n; i++) {
+            if (s.charAt(i) != t.charAt(i)) {
+                long k = m.get(s.charAt(i) - 'a')[t.charAt(i) - 'a'];
+                if (k == -1) {
+                    return -1;
+                }
+                ans += k;
+            }
+        }
+        return ans;
     }
 }
