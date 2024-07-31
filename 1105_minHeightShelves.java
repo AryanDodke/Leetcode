@@ -1,4 +1,4 @@
-public class Solution {
+class Solution {
     public int minHeightShelves(int[][] books, int shelfWidth) {
         int n = books.length;
         int[] dp = new int[n + 1];
