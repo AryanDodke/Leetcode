@@ -1,6 +1,6 @@
 import java.util.*;;
 
-public class Solution {
+class Solution {
     public int minimumPushes(String word) {
         int[] mp = new int[26];
 
