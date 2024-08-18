@@ -47,7 +47,7 @@ class Solution {
     }
 
     public static void main(String[] args) {
-        Solution sol = new Solution();
+        nthUglyNumber sol = new nthUglyNumber();
         
         int[][] grid1 = {{4,3,8,4}, {9,5,1,9}, {2,7,6,2}};
         System.out.println(sol.numMagicSquaresInside(grid1)); // Output: 1
